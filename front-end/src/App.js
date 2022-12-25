@@ -9,18 +9,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 const darkTheme = createTheme({
   palette: {
-    type: 'dark',
+    mode: 'dark',
     primary: {
       main: '#047316',
     },
     secondary: {
       main: '#22371b',
     },
-    background: {
-      default: '#ffffff',
-      paper: '#ffffff',
-    },
-    divider: 'rgba(88,86,86,0.12)',
   },
 });
 
