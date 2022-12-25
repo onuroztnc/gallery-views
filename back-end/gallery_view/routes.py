@@ -5,16 +5,75 @@ from gallery_view.models import Image
 import requests
 from flask import jsonify, make_response, send_file
 import io
-from PIL import Image as deneme
+from PIL import Image as PIL_image
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-
+# the function that checks if the file name is image type
 def is_image_type(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# the function that upload image from computer files
+def upload_image_from_computer(request):
 
+    # the URL address of the files downloaded from the computer is kept as an empty string.
+    pic_url = ''
+    # picture are placed in 'picture' field while sending by front-end.
+    pic = request.files['picture']
+    filename = secure_filename(pic.filename)
+    mimetype = pic.mimetype
+    # check if the file type is image
+    if not is_image_type(filename):
+        return make_response(jsonify(
+            {"message": "The file type is not valid.", }
+        ), 400)
+
+    if not filename or not mimetype:
+        return make_response(jsonify(
+            {"message": "The image could not be saved.", }
+        ), 400)
+
+    # picture saved to database
+    img = Image(img=pic.read(), name=filename, mimetype=mimetype, url=pic_url)
+    db.session.add(img)
+    db.session.commit()
+
+    return make_response(jsonify(
+        {"message": "The picture saved successfully.", "unique_id":img.id}
+    ), 200)  
+
+# the function that upload image from url
+def upload_image_from_url(request):
+
+    # image's url are placed in ['picture_url']['fileUrl'] field while sending by front-end.
+    pic_url = eval(request.form['picture_url'])['fileUrl']
+    try:
+        # getting image from url
+        url_request = requests.get(pic_url)
+        pic = url_request.content
+        mimetype = url_request.headers['content-type']
+        filename = pic_url
+    except:
+        return make_response(jsonify(
+            {"message": "The image could not be saved.", }
+        ), 400)   
+    
+    if not filename or not mimetype:
+        return make_response(jsonify(
+            {"message": "The image could not be saved.", }
+        ), 400)
+
+    # picture saved to database
+    img = Image(img=pic, name=filename, mimetype=mimetype, url=pic_url)
+    db.session.add(img)
+    db.session.commit()
+
+    return make_response(jsonify(
+        {"message": "The picture saved successfully.", "unique_id":img.id}
+    ), 200)    
+
+# rest API function that uploads images to the system
 @app.route('/upload_image', methods=['POST'])
 def upload():
     # check if the post request has the picture or picture's link
@@ -22,47 +81,15 @@ def upload():
         return make_response(jsonify(
             {"message": "The image could not be saved.", }
         ), 400)
+
     # if both the link and the image are given, the image is saved, the link is ignored.
     if 'picture' in request.files:
-        pic_url = ''
-        pic = request.files['picture']
-        filename = secure_filename(pic.filename)
-        mimetype = pic.mimetype
-        image = pic.read()
+        return upload_image_from_computer(request)
     else:
-        pic_url = eval(request.form['picture_url'])['fileUrl']
-        try:
-            url_request = requests.get(pic_url)
-            pic = url_request.content
-            mimetype = url_request.headers['content-type']
-            filename = pic_url
-            image = pic
-        except:
-            return make_response(jsonify(
-                {"message": "The image could not be saved.", }
-            ), 400)
-
-    if not filename or not mimetype:
-        return make_response(jsonify(
-            {"message": "The image could not be saved.", }
-        ), 400)
-
-    # check if the file type is image
-    if not is_image_type(filename):
-        return make_response(jsonify(
-            {"message": "The file type is not valid.", }
-        ), 400)
-
-    # picture saved to database
-    img = Image(img=image, name=filename, mimetype=mimetype, url=pic_url)
-    db.session.add(img)
-    db.session.commit()
-
-    return make_response(jsonify(
-        {"message": "The picture saved successfully.", "unique_id":img.id}
-    ), 200)
+        return upload_image_from_url(request)
 
 
+# rest API function that download images from the system
 @app.route('/download_image', methods=['GET'])
 def download_image():
     args = request.args
@@ -75,6 +102,7 @@ def download_image():
     unique_id = args['unique_id']
     image = Image.query.filter_by(id=unique_id).first()
 
+    # check if the image exists in database
     if image:
         return send_file(io.BytesIO(image.img), mimetype=image.mimetype)
     else:
@@ -83,11 +111,16 @@ def download_image():
         ), 400)
 
 
+# rest API function that get image's ids from the system
 @app.route('/list_images', methods=['GET'])
 def list_images():
+
+    # getting all image from database
     images = Image.query.all()
     unique_ids = []
 
+    # The database is returned in query object type. 
+    # Since the query object is not JSON Serializable, we are creating our own list again.
     for image in images:
         download_url = request.host_url + '/download_image?unique_id=' + str(image.id);
         unique_ids.append({"id": image.id, "download_url": download_url})
@@ -97,6 +130,7 @@ def list_images():
     ), 200)
 
 
+# rest API function that get image's height and width
 @app.route('/analyse_image', methods=['GET'])
 def analyse_image():
     args = request.args
@@ -109,8 +143,10 @@ def analyse_image():
     unique_id = args['unique_id']
     image = Image.query.filter_by(id=unique_id).first()
 
+    # check if the image exists in database
     if image:
-        picture = deneme.open(io.BytesIO(image.img))
+        # converts from byte array to PIL Image type to get width and height properties
+        picture = PIL_image.open(io.BytesIO(image.img))
         width = picture.width
         height = picture.height
         return make_response(jsonify(
