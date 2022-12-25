@@ -25,6 +25,15 @@ const useStyles = makeStyles({
 
 });
 
+/**
+ * 
+ * This function is used to show the images to the user in a grid structure.
+ *  The number of columns was determined as 3.
+ * @param {
+ *   imageList : the array where the unique id and downloadable url address of the pictures are kept.
+ * } props 
+ * @returns 
+ */
 export default function MasonryImageList(props) {
 
     const classes = useStyles();
@@ -42,6 +51,8 @@ export default function MasonryImageList(props) {
             />
             <ImageListItemBar
             title={item.id}
+            
+            // info button used to access detailed information about the pictures
             actionIcon={
               <IconButton
                 onClick={() => {props.handleInfoButton(item.id)}}

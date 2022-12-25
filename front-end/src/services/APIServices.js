@@ -1,3 +1,7 @@
+/**
+ * This file contains the requests to be sent to the backend.
+ */
+
 export const API_BASE_ADDRESS = "http://localhost:5000";
 export const API_UPLOAD_IMAGE_URL = API_BASE_ADDRESS + '/upload_image';
 export const API_GET_IMAGE_LIST = API_BASE_ADDRESS + '/list_images';
@@ -44,6 +48,14 @@ async function requestFile(options) {
         );
 };
 
+/**
+ * this function sends the file and the url of the file to the backend.
+ * @param  
+ *          const newFileInformation = new FormData()
+ *          newFileInformation.append('picture', file)
+ *          newFileInformation.append('picture_url', JSON.stringify({fileUrl}));
+ * @returns 
+ */
 export function uploadFile(file) {
     return requestFile({
         url: API_UPLOAD_IMAGE_URL,
@@ -52,6 +64,10 @@ export function uploadFile(file) {
     });
 }
 
+/**
+ * this function gets the image's ids from backend
+ * @returns 
+ */
 export function getImageIdList() {
     return request({
         url: API_GET_IMAGE_LIST,
@@ -59,6 +75,10 @@ export function getImageIdList() {
     });
 }
 
+/**
+ * this function gets detailed about image from backend
+ * @returns 
+ */
 export function getAnalyseImage(unique_id) {
     return request({
         url: API_GET_ANALYSE_IMAGE + unique_id,
