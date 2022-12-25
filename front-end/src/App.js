@@ -4,6 +4,25 @@ import Gallery from './pages/Gallery/Gallery';
 import AppBar from './components/controls/appbar/AppBar';
 import * as apiService from './services/APIServices';
 import Notification from './components/controls/Notification';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: '#047316',
+    },
+    secondary: {
+      main: '#22371b',
+    },
+    background: {
+      default: '#ffffff',
+      paper: '#ffffff',
+    },
+    divider: 'rgba(88,86,86,0.12)',
+  },
+});
 
 function App() {
 
@@ -29,7 +48,9 @@ function App() {
 
 
   return (
-    <div className="App">
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <div className="App">
       <header className="App-header">
         <Notification
           notify={notify}
@@ -39,6 +60,8 @@ function App() {
         <Gallery uniqueIds={uniqueIds}/>
       </header>
     </div>
+    </ThemeProvider>
+
   );
 }
 
