@@ -1,0 +1,21 @@
+version: '3'
+services:
+  frontent-service:
+    build:
+      context: ./front-end
+    ports:
+      - "3000:3000"
+    container_name: react-ui
+    stdin_open: true
+    volumes:
+       - ./front-end:/usr/src/app/front-end
+       - /usr/src/app/front-end/node_modules
+  backend-service:
+    build:
+      context: ./back-end
+    command: "flask run --host=0.0.0.0 --port=5000"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=run.py
+    ports:
+      - "5000:5000"
