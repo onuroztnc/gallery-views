@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# Gallery View Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+It is an application where you can store and list your pictures.
 
-## Available Scripts
+### Home Page
 
-In the project directory, you can run:
+<img width="1440" alt="Screenshot 2022-12-25 at 5 00 30 pm" src="https://user-images.githubusercontent.com/40147847/209458461-3de39af1-837b-40f5-b429-fc9ea8f44ba9.png">
 
-### `npm start`
+### Upload New Image
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+You can upload your new pictures by clicking the upload icon in the right corner of the navigation.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+When you click on the icon, the website will open a popup. You can upload the new image from your file system or the image's url.
 
-### `npm test`
+<img width="607" alt="Screenshot 2022-12-25 at 5 05 29 pm" src="https://user-images.githubusercontent.com/40147847/209458642-b811fd49-498d-4ff7-95e0-311267f4231c.png">
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+#### Note: If both information is given, the system will first load the image from the file system to the system. The system ignores the url address of the image.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The system will notify you after the file upload is complete.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<img width="415" alt="Screenshot 2022-12-25 at 5 12 38 pm" src="https://user-images.githubusercontent.com/40147847/209458690-099756a8-6606-4ddc-a82e-8b879eb4f82c.png">
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### Image Analysis
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+When you move the mouse cursor over the images, you can see the image id.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<img width="437" alt="Screenshot 2022-12-25 at 5 15 32 pm" src="https://user-images.githubusercontent.com/40147847/209458747-b6081f56-344c-4779-98f2-61263cb23ece.png">
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+You can get detailed information about the picture by clicking on the Info icon.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<img width="394" alt="Screenshot 2022-12-25 at 5 16 30 pm" src="https://user-images.githubusercontent.com/40147847/209458749-c9ce96db-e46a-471f-94a9-d25f68796c71.png">
 
-## Learn More
+## How to run
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+These instructions show you how to run the codes.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Clone the project's repository 
 
-### Code Splitting
+		git clone https://github.com/onuroztnc/gallery-views
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Go to the directory where the project is
 
-### Analyzing the Bundle Size
+		cd gallery-views
+    
+- Build Docker's services
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+		docker-compose build --no-cache
 
-### Making a Progressive Web App
+- Create and start containers
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+		docker-compose up 
+    
+The system is ready. You can access the project at 		`http://localhost:3000`
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
